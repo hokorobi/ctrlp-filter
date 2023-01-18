@@ -1,5 +1,9 @@
 scriptencoding utf-8
 
+
+" call ctrlp#filter#do('CtrlP', #{openfunc: 'ctrlp#action#paste#do', filterfunc: 'ctrlp#filter#affix#do', filterargs: ['prefix', 'suffix']})
+" call ctrlp#filter#do('CtrlP', #{openfunc: 'ctrlp#action#paste#do', filterfunc: 'ctrlp#filter#substitute#do', filterargs: ['\\', '/', 'g']})
+" TODO: filterfuncs: ['substitute', 'affix'], filtersargs: {substitute: [], affix: []}
 function! ctrlp#filter#do(ctrlp, params) abort
   if exists(":" .. a:ctrlp) != 2
     echohl WarningMsg | echomsg a:ctrlp .. ": 存在しないコマンドです。" | echohl None
