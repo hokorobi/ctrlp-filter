@@ -1,9 +1,10 @@
 scriptencoding utf-8
 
-
-" call ctrlp#filter#do('CtrlP', #{filterfunc: 'ctrlp#filter#affix#do', filterargs: ['prefix', 'suffix']})
-" call ctrlp#filter#do('CtrlP', #{filterfunc: 'ctrlp#filter#substitute#do', filterargs: ['\\', '/', 'g']})
-" TODO: filtersfuncs: ['substitute', 'affix'], filtersargs: {substitute: [], affix: []}
+" call ctrlp#filter#do('CtrlP', #{filtermethod: 'substitute', filterargs: ['\\', '/', 'g']})
+" call ctrlp#filter#do('CtrlP', #{filtermethod: 'printf', filterargs: ['prefix%ssuffix']})
+" call ctrlp#filter#do('CtrlP', #{filtermethod: 'execute')
+" TODO: call ctrlp#filter#do('CtrlP', #{filtermethod: 'execute', filterargs: 'GinBuffer log --all --graph -100 --oneline --decorate'})
+" TODO: filtermethods: ['substitute', 'printf'], filtersargs: {substitute: [], printf: []}
 function! ctrlp#filter#do(ctrlp, params) abort
   if exists(":" .. a:ctrlp) != 2
     echohl WarningMsg | echomsg a:ctrlp .. ": 存在しないコマンドです。" | echohl None
@@ -40,6 +41,17 @@ function! ctrlp#filter#filterfunc(line) abort
   else
     let Func = function(filterfunc, get(g:ctrlp_filter_params, 'filterargs', []))
     let result = Func(a:line)
+  endif
+  return result
+endfunction
+
+function! ctrlp#filter#filtermethod(line) abort
+  let filtermethod = get(g:ctrlp_filter_params, 'filtermethod', '')
+  if filtermethod ==# ''
+    let result = a:line
+  else
+    let Method = function(filtermethod, get(g:ctrlp_filter_params, 'filterargs', []))
+    let result = a:line->Method()
   endif
   return result
 endfunction
