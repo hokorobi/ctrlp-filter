@@ -1,10 +1,9 @@
 scriptencoding utf-8
 
-" call ctrlp#filter#do('CtrlP', #{filtermethod: 'substitute', filterargs: ['\\', '/', 'g']})
-" call ctrlp#filter#do('CtrlP', #{filtermethod: 'printf', filterargs: ['prefix%ssuffix']})
-" call ctrlp#filter#do('CtrlP', #{filtermethod: 'execute')
-" TODO: call ctrlp#filter#do('CtrlP', #{filtermethod: 'execute', filterargs: 'GinBuffer log --all --graph -100 --oneline --decorate'})
-" TODO: filtermethods: ['substitute', 'printf'], filtersargs: {substitute: [], printf: []}
+" Example:
+" call ctrlp#filter#do('CtrlP', #{filtermethods: ['printf', 'execute'], filtersargs: #{printf: ['GinBuffer log --all --graph -100 --oneline --decorate %s']}, openfunc: 'ctrlp#action#execute#do'})
+" call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute'], filtersargs: #{substitute: ['\\', '/', 'g']}})
+" call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute', 'printf'], filtersargs: #{substitute: ['\\', '/', 'g'], printf: ['.. figure:: %s']}})
 function! ctrlp#filter#do(ctrlp, params) abort
   if exists(":" .. a:ctrlp) != 2
     echohl WarningMsg | echomsg a:ctrlp .. ": 存在しないコマンドです。" | echohl None
@@ -34,24 +33,15 @@ function! s:existsfunc(func) abort
   return v:true
 endfunction
 
-function! ctrlp#filter#filterfunc(line) abort
-  let filterfunc = get(g:ctrlp_filter_params, 'filterfunc', '')
-  if filterfunc ==# ''
-    let result = a:line
-  else
-    let Func = function(filterfunc, get(g:ctrlp_filter_params, 'filterargs', []))
-    let result = Func(a:line)
-  endif
-  return result
-endfunction
-
-function! ctrlp#filter#filtermethod(line) abort
-  let filtermethod = get(g:ctrlp_filter_params, 'filtermethod', '')
-  if filtermethod ==# ''
-    let result = a:line
-  else
-    let Method = function(filtermethod, get(g:ctrlp_filter_params, 'filterargs', []))
-    let result = a:line->Method()
+function! ctrlp#filter#filtermethods(line) abort
+  let filtermethods = get(g:ctrlp_filter_params, 'filtermethods', [])
+  let result = a:line
+  if len(filtermethods) > 0
+    for method in filtermethods
+      let Method = function(method, get(g:ctrlp_filter_params.filtersargs, method, []))
+      let result = result->Method()
+      echom result
+    endfor
   endif
   return result
 endfunction
