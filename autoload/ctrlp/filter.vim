@@ -5,9 +5,9 @@ scriptencoding utf-8
 " call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute'], methodsargs: #{substitute: ['\\', '/', 'g']}})
 " call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute', 'printf'], methodsargs: #{substitute: ['\\', '/', 'g'], printf: ['.. figure:: %s']}})
 function! ctrlp#filter#do(ctrlp, params) abort
-  let g:ctrlp_open_func_back = g:ctrlp_open_func
   let g:ctrlp_filter_params = a:params
-  let g:ctrlp_open_func = { get(a:params, 'kind', 'files'): get(a:params, 'openfunc', 'ctrlp#action#paste#do') }
+  let g:ctrlp_open_func_back = g:ctrlp_open_func
+  let g:ctrlp_open_func = { get(a:params, 'kind', 'files'): get(a:params, 'openfunc', 'ctrlp#filter#paste') }
   try
     execute join(extend([a:ctrlp], get(a:params, 'ctrlpargs', [])))
   finally
