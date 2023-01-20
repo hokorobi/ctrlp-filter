@@ -1,0 +1,103 @@
+*ctrlp-filter.txt*	日本語ヘルプ
+
+Version :
+Author  : hokorobi
+License : MIT license  {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+==============================================================================
+目次						*ctrlp-filter-contents*
+
+概要				|ctrlp-filter-introduction|
+使い方				|ctrlp-filter-usage|
+インターフェイス		|ctrlp-filter-interface|
+  変数				  |ctrlp-filter-variables|
+  関数				  |ctrlp-filter-functions|
+TODO				|ctrlp-filter-todo|
+更新履歴			|ctrlp-filter-changelog|
+
+
+==============================================================================
+概要						*ctrlp-filter-introduction*
+
+*ctrlp-filter* は
+
+最新版:
+https://github.com/hokorobi/ctrlp-filter.vim
+
+
+==============================================================================
+使い方						*ctrlp-filter-usage*
+
+CtrlP で選択したファイルの \ を / に変換して挿入。
+openfunc を指定しない場合は挿入。
+
+	:call ctrlp#filter#do('CtrlP', #{
+	\   filtermethods: ['substitute'],
+	\   methodsargs: #{substitute: ['\\', '/', 'g']}
+	\ })
+
+CtrlP で選択したファイルの git log を GitBuffer log で表示。
+openfunc に ctrlp#action#execute#do を指定して作り上げた文字列を実行。
+filtermethods に与えたリストのメソッドを順番に実行。結果も順に渡す。
+
+	:call ctrlp#filter#do('CtrlP', #{
+	\   filtermethods: ['printf', 'execute'],
+	\   methodsargs: #{
+	\     printf: ['GinBuffer log --all --graph --oneline --decorate %s']
+	\   },
+	\   openfunc: 'ctrlp#action#execute#do'
+	\ })
+
+CtrlP で選択したファイルの \ を / に変換後、先頭に .. figure:: を追加。
+filtermethods に与えたリストのメソッドを順番に実行。結果も順に渡す。
+
+	:call ctrlp#filter#do('CtrlP', #{
+	\   filtermethods: ['substitute', 'printf'],
+	\   methodsargs: #{
+	\     substitute: ['\\', '/', 'g'],
+	\     printf: ['.. figure:: %s']
+	\   }
+	\ })
+
+==============================================================================
+インターフェイス				*ctrlp-filter-interface*
+
+------------------------------------------------------------------------------
+変数						*ctrlp-filter-variables*
+
+g:ctrlp_filter_params				*g:ctrlp_filter_params*
+	既定値: = a:params
+
+
+------------------------------------------------------------------------------
+関数						*ctrlp-filter-functions*
+
+==============================================================================
+TODO						*ctrlp-filter-todo*
+
+
+
+==============================================================================
+更新履歴					*ctrlp-filter-changelog*
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:
