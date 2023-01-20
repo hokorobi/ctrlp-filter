@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 " Example:
-" call ctrlp#filter#do('CtrlP', #{filtermethods: ['printf', 'execute'], methodsargs: #{printf: ['GinBuffer log ++opener=tabnew --all --graph -100 --oneline --decorate %s']}, openfunc: 'ctrlp#action#execute#do'})
+" call ctrlp#filter#do('CtrlP', #{filtermethods: ['printf', 'execute'], methodsargs: #{printf: ['GinBuffer log ++opener=tabnew --all --graph -100 --oneline --decorate %s']}, openfunc: 'ctrlp#filter#execute'})
 " call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute'], methodsargs: #{substitute: ['\\', '/', 'g']}})
 " call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute', 'printf'], methodsargs: #{substitute: ['\\', '/', 'g'], printf: ['.. figure:: %s']}})
 function! ctrlp#filter#do(ctrlp, params) abort
@@ -23,3 +23,23 @@ function! ctrlp#filter#filtermethods(line) abort
   endfor
   return result
 endfunction
+
+" action
+function! ctrlp#filter#execute(action, line) abort
+  call ctrlp#exit()
+
+  execute(ctrlp#filter#filtermethods(a:line))
+endfunction
+
+function! ctrlp#filter#paste(action, line) abort
+  call ctrlp#exit()
+
+  let backregz = getreg('z')
+  try
+    call setreg('z', ctrlp#filter#filtermethods(a:line))
+    noautocmd normal! "zp
+  finally
+    call setreg('z', backregz)
+  endtry
+endfunction
+
