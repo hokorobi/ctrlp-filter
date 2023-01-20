@@ -7,7 +7,5 @@ function! ctrlp#action#paste#do(action, line) abort
   call setreg('z', ctrlp#filter#filtermethods(a:line))
   noautocmd normal! "zp
   call setreg('z', backregz)
-
-  let g:ctrlp_open_func = {}
 endfunction
 
