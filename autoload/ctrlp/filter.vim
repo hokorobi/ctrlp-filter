@@ -1,18 +1,25 @@
 scriptencoding utf-8
 
 " Example:
-" call ctrlp#filter#do('CtrlP', #{filtermethods: ['printf', 'execute'], methodsargs: #{printf: ['GinBuffer log ++opener=tabnew --all --graph -100 --oneline --decorate %s']}, openfunc: 'ctrlp#filter#execute'})
+" call ctrlp#filter#do('CtrlP', #{filtermethods: ['printf', 'execute'], methodsargs: #{printf: ['GinBuffer log ++opener=tabnew --all --graph -100 --oneline --decorate %s']}})
 " call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute'], methodsargs: #{substitute: ['\\', '/', 'g']}})
 " call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute', 'printf'], methodsargs: #{substitute: ['\\', '/', 'g'], printf: ['.. figure:: %s']}})
+"
+" TODO:
+" - add filterfuncs, funcsargs
+
 function! ctrlp#filter#do(ctrlp, params) abort
+  let g:ctrlp_open_func_back = get(g:, 'ctrlp_open_func', {})
+  let g:ctrlp_open_func = { get(a:params, 'kind', 'files'): get(a:params, 'openfunc', s:getdefaultopenfunc(a:params)) }
   let g:ctrlp_filter_params = a:params
-  let g:ctrlp_open_func_back = g:ctrlp_open_func
-  let g:ctrlp_open_func = { get(a:params, 'kind', 'files'): get(a:params, 'openfunc', 'ctrlp#filter#paste') }
   try
     execute join(extend([a:ctrlp], get(a:params, 'ctrlpargs', [])))
   finally
     let g:ctrlp_open_func = g:ctrlp_open_func_back
   endtry
+endfunction
+function! s:getdefaultopenfunc(params) abort
+  return get(a:params, 'filtermethods', [])->get(-1, '') ==# 'execute' ? 'ctrlp#filter#execute' : 'ctrlp#filter#paste'
 endfunction
 
 function! ctrlp#filter#filtermethods(line) abort
