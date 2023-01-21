@@ -1,13 +1,3 @@
-scriptencoding utf-8
-
-" Example:
-" call ctrlp#filter#do('CtrlP', #{filtermethods: ['printf', 'execute'], methodsargs: #{printf: ['GinBuffer log ++opener=tabnew --all --graph -100 --oneline --decorate %s']}})
-" call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute'], methodsargs: #{substitute: ['\\', '/', 'g']}})
-" call ctrlp#filter#do('CtrlP', #{filtermethods: ['substitute', 'printf'], methodsargs: #{substitute: ['\\', '/', 'g'], printf: ['.. figure:: %s']}})
-"
-" TODO:
-" - add filterfuncs, funcsargs
-
 function! ctrlp#filter#do(ctrlp, params) abort
   let g:ctrlp_open_func_back = get(g:, 'ctrlp_open_func', {})
   let g:ctrlp_open_func = { get(a:params, 'kind', 'files'): get(a:params, 'openfunc', s:getdefaultopenfunc(a:params)) }

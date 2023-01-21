@@ -1,6 +1,6 @@
 *ctrlp-filter.txt*	日本語ヘルプ
 
-Version :
+Version : alpha
 Author  : hokorobi
 License : MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -30,6 +30,7 @@ License : MIT license  {{{
 インターフェイス		|ctrlp-filter-interface|
   変数				  |ctrlp-filter-variables|
   関数				  |ctrlp-filter-functions|
+  パラエータ			  |ctrlp-filter-params|
 TODO				|ctrlp-filter-todo|
 更新履歴			|ctrlp-filter-changelog|
 
@@ -37,7 +38,7 @@ TODO				|ctrlp-filter-todo|
 ==============================================================================
 概要						*ctrlp-filter-introduction*
 
-*ctrlp-filter* は
+*ctrlp-filter* は CtrlP コマンドの結果を加工するためのプラグイン。
 
 最新版:
 https://github.com/hokorobi/ctrlp-filter.vim
@@ -46,36 +47,27 @@ https://github.com/hokorobi/ctrlp-filter.vim
 ==============================================================================
 使い方						*ctrlp-filter-usage*
 
-CtrlP で選択したファイルの \ を / に変換して挿入。
-openfunc を指定しない場合は挿入。
-
-	:call ctrlp#filter#do('CtrlP', #{
-	\   filtermethods: ['substitute'],
-	\   methodsargs: #{substitute: ['\\', '/', 'g']}
-	\ })
-
-CtrlP で選択したファイルの git log を GitBuffer log で表示。
-openfunc に ctrlp#action#execute#do を指定して作り上げた文字列を実行。
-filtermethods に与えたリストのメソッドを順番に実行。結果も順に渡す。
-
-	:call ctrlp#filter#do('CtrlP', #{
-	\   filtermethods: ['printf', 'execute'],
-	\   methodsargs: #{
-	\     printf: ['GinBuffer log --all --graph --oneline --decorate %s']
-	\   },
-	\   openfunc: 'ctrlp#action#execute#do'
-	\ })
-
+例:
 CtrlP で選択したファイルの \ を / に変換後、先頭に .. figure:: を追加。
-filtermethods に与えたリストのメソッドを順番に実行。結果も順に渡す。
+filtermethods に与えたリストのメソッドを順番に実行し、結果を順に渡す。
 
 	:call ctrlp#filter#do('CtrlP', #{
 	\   filtermethods: ['substitute', 'printf'],
 	\   methodsargs: #{
 	\     substitute: ['\\', '/', 'g'],
-	\     printf: ['.. figure:: %s']
-	\   }
+	\     printf: ['.. figure:: %s'],
+	\   },
 	\ })
+
+CtrlP で選択したファイルを ExampleCommand の引数として実行。
+
+	:call ctrlp#filter#do('CtrlP', #{
+	\   filtermethods: ['printf', 'execute'],
+	\   methodsargs: #{
+	\     printf: ['ExampleCommand %s'],
+	\   },
+	\ })
+
 
 ==============================================================================
 インターフェイス				*ctrlp-filter-interface*
@@ -90,9 +82,58 @@ g:ctrlp_filter_params				*g:ctrlp_filter_params*
 ------------------------------------------------------------------------------
 関数						*ctrlp-filter-functions*
 
+ctrlp#filter#do({ctrlp}, {params})
+		CtrlP のコマンドを実行して結果を加工する。
+		デフォルトでは加工した結果をバッファに挿入。
+		{ctrlp} は CtrlP のコマンド。'CtrlP' など。
+		{params} は |ctrlp-filter-params| 参照。
+
+						*ctrlp#filter#paste()*
+ctrlp#filter#paste({action}, {line})
+		|g:ctrlp_open_func| に設定する関数。
+		バッファへ {line} を挿入。
+
+						*ctrlp#filter#execute()*
+ctrlp#filter#execute({action}, {line})
+		|g:ctrlp_open_func| に設定する関数。
+		{line} を実行。
+
+------------------------------------------------------------------------------
+パラメータ					*ctrlp-filter-params*
+		|{params}| は以下のキーを持つ。
+
+						*ctrlp-filter-params-ctrlpargs*
+ctrlpargs	(List)
+		|{ctrlp}| の引数。
+
+					*ctrlp-filter-params-filtermethods*
+filtermethods	(List)
+		|{ctrlp}|の結果を加工する |Method|。リストの順番で実行する。
+
+					*ctrlp-filter-params-methodsargs*
+methodsargs	(Dict)
+		filtermethods のそれぞれに渡される引数。
+		引数を使用する |Method|名がキー。
+
+						*ctrlp-filter-params-kind*
+kind		(String)
+		|g:ctrlp_open_func|のキー。
+
+		Default: 'files'
+
+						*ctrlp-filter-params-openfunc*
+openfunc	(String)
+		一時的に |g:ctrlp_open_func| に設定される関数。
+		filtermethods の最後が 'execute' の場合は、
+		'ctrlp#filter#execute' がデフォルトとなり、加工した結果を実行
+		する。
+
+		Default: 'ctrlp#filter#paste' or 'ctrlp#filter#execute'
+
 ==============================================================================
 TODO						*ctrlp-filter-todo*
 
+- Add filterfuncs, funcsargs to {params}
 
 
 ==============================================================================
