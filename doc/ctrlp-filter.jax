@@ -28,7 +28,6 @@ License : MIT license  {{{
 概要				|ctrlp-filter-introduction|
 使い方				|ctrlp-filter-usage|
 インターフェイス		|ctrlp-filter-interface|
-  変数				  |ctrlp-filter-variables|
   関数				  |ctrlp-filter-functions|
   パラエータ			  |ctrlp-filter-params|
 TODO				|ctrlp-filter-todo|
@@ -71,13 +70,6 @@ CtrlP で選択したファイルを ExampleCommand の引数として実行。
 
 ==============================================================================
 インターフェイス				*ctrlp-filter-interface*
-
-------------------------------------------------------------------------------
-変数						*ctrlp-filter-variables*
-
-g:ctrlp_filter_params				*g:ctrlp_filter_params*
-	既定値: = a:params
-
 
 ------------------------------------------------------------------------------
 関数						*ctrlp-filter-functions*
