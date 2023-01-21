@@ -75,7 +75,7 @@ CtrlP で選択したファイルを ExampleCommand の引数として実行。
 ------------------------------------------------------------------------------
 関数						*ctrlp-filter-functions*
 
-ctrlp#filter#do({ctrlp}, {params})
+ctrlp#filter#do({ctrlp} [, {params}])
 		CtrlP のコマンドを実行して結果を加工する。
 		デフォルトでは加工した結果をバッファに挿入。
 		{ctrlp} は CtrlP のコマンド。'CtrlP' など。

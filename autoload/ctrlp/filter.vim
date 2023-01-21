@@ -1,4 +1,4 @@
-function! ctrlp#filter#do(ctrlp, params) abort
+function! ctrlp#filter#do(ctrlp, params={}) abort
   let s:ctrlp_open_func_back = get(g:, 'ctrlp_open_func', {})
   let g:ctrlp_open_func = { get(a:params, 'kind', 'files'): get(a:params, 'openfunc', s:getdefaultopenfunc(a:params)) }
   let s:ctrlp_filter_params = a:params
