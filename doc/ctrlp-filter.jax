@@ -47,6 +47,11 @@ https://github.com/hokorobi/ctrlp-filter.vim
 使い方						*ctrlp-filter-usage*
 
 例:
+
+CtrlP で選択したファイルをバッファに挿入。
+>
+	:call ctrlp#filter#do('CtrlP')
+<
 CtrlP で選択したファイルの \ を / に変換後、先頭に .. figure:: を追加して
 バッファに挿入。
 filtermethods に与えたリストのメソッドを順番に実行し、結果を順に渡す。
