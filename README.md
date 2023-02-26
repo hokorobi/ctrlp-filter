@@ -2,6 +2,9 @@
 
 *ctrlp-filter* は CtrlP コマンドの結果を加工するためのプラグイン。
 
+[christoomey/ctrlp-generic](https://github.com/christoomey/ctrlp-generic) で十分な気がしてきた。
+
+
 最新版: https://github.com/hokorobi/ctrlp-filter.vim
 
 
